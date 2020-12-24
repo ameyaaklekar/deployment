@@ -1,0 +1,32 @@
+version: '3.8'
+services: 
+  mysql-db:
+    image: mysql:5.7
+    ports: 
+      - 0.0.0.0:7000:3306
+    environment: 
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: typeOrm
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes: 
+      - data-db:/var/lib/mysql
+
+  node-api:
+    build: '../tsApi'
+    depends_on: 
+      - mysql-db
+    ports: 
+      - 5000:5000
+    volumes: 
+      - ../tsApi:/var/www/html/api
+
+  react-frontend:
+    build: '../react-resto'
+    ports:
+      - 3000:3000
+    volumes: 
+      - ../react-resto:/var/www/html/frontend
+
+volumes: 
+  data-db: {}
